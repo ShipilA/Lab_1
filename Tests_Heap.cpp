@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "Heap.h"
 #include<iostream>
+#include <ctime>
 
 bool Test1() {//checking insert() and is_empty()
 	bool ok = 1;
@@ -159,10 +160,45 @@ bool Test6() {//checking insert() and extract_min()
 	return ok;
 }
 
+bool Test7() {//checking insert() and extract_min() big test
+	double start_time = clock();
+	Heap<int> H;
+	bool ok = 1;
+	for (int i = 0; i < 100000; ++i) {
+		H.insert(i);
+	}
+	for (int i = 0; i < 100000; ++i) {
+		ok = ok && H.extract_min() == i;
+	}
+	long double end_time = clock();
+	long double time = end_time - start_time; //time spent on the test
+	std::cout << "Test7: " << time / 1000 << " seconds" << std::endl;
+	if (!ok)
+		std::cout << "Test7 wasn't passed" << std::endl;
+	return ok;
+}
+
+bool Test8() {//checking insert() and extract_min() big test
+	double start_time = clock();
+	Heap<int> H;
+	bool ok = 1;
+	for (int i = 0; i < 1000000; ++i) {
+		H.insert(i);
+	}
+	for (int i = 0; i < 1000000; ++i) {
+		ok = ok && H.extract_min() == i;
+	}
+	long double end_time = clock();
+	long double time = end_time - start_time; //time spent on the test
+	std::cout << "Test8: " << time / 1000 << " seconds" << std::endl;
+	if (!ok)
+		std::cout << "Test8 wasn't passed" << std::endl;
+	return ok;
+}
 
 int main() {
 	bool ok = 1;
-	ok = Test1() && Test2() && Test3() && Test4() && Test5() && Test6();
+	ok = Test1() && Test2() && Test3() && Test4() && Test5() && Test6() && Test7() && Test8();
 	if (ok)
 		std::cout << "OK" << std::endl;
 	else
