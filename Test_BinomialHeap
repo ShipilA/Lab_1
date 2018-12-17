@@ -1,0 +1,337 @@
+#include "stdafx.h"
+#include <stdio.h>
+#include <tchar.h>
+#include <iostream>
+#include <ctime>
+#include "BinomialHeap.h"
+
+bool Test1() {//checking insert() and is_empty()
+	unsigned int start_time = clock();
+	BinomialHeap<int> H;
+	bool ok = 1;
+	H.insert(123);
+	ok = ok && !H.is_empty();
+	H.insert(1);
+	ok = ok && !H.is_empty();
+	H.insert(3);
+	ok = ok && !H.is_empty();
+	H.insert(5);
+	ok = ok && !H.is_empty();
+	unsigned int end_time = clock();
+	unsigned int time = end_time - start_time; //time spent on the test
+	if (!ok)
+		std::cout << "Test1 wasn't passed" << std::endl;
+	return ok;
+}
+
+bool Test2() {//checking insert() and get_min()
+	unsigned int start_time = clock();
+	BinomialHeap<int> H;
+	bool ok = 1;
+	H.insert(13);
+	ok = ok && H.get_min() == 13;
+	H.insert(12);
+	ok = ok && H.get_min() == 12;
+	H.insert(3);
+	ok = ok && H.get_min() == 3;
+	H.insert(5);
+	ok = ok && H.get_min() == 3;
+	H.insert(1);
+	ok = ok && H.get_min() == 1;
+	H.insert(9);
+	ok = ok && H.get_min() == 1;
+	H.insert(7);
+	ok = ok && H.get_min() == 1;
+	unsigned int end_time = clock();
+	unsigned int time = end_time - start_time; //time spent on the test
+	if (!ok)
+		std::cout << "Test2 wasn't passed" << std::endl;
+	return ok;
+}
+
+bool Test3() {//checking insert() and extract_min()
+	unsigned int start_time = clock();
+	BinomialHeap<int> H;
+	bool ok = 1;
+	H.insert(12);
+	H.insert(3);
+	H.insert(5);
+	H.insert(1);
+	H.insert(13);
+	H.insert(9);
+	ok = ok && H.extract_min() == 1;
+	ok = ok && H.extract_min() == 3;
+	H.insert(7);
+	ok = ok && H.extract_min() == 5;
+	ok = ok && H.extract_min() == 7;
+	ok = ok && H.extract_min() == 9;
+	H.insert(9);
+	ok = ok && H.extract_min() == 9;
+	ok = ok && H.extract_min() == 12;
+	ok = ok && H.extract_min() == 13;
+	unsigned int end_time = clock();
+	unsigned int time = end_time - start_time; //time spent on the test
+	if (!ok)
+		std::cout << "Test3 wasn't passed" << std::endl;
+	return ok;
+}
+
+bool Test4() {//checking insert(), extract_min() and is_empty()
+	unsigned int start_time = clock();
+	BinomialHeap<int> H;
+	bool ok = 1;
+	ok = ok && H.is_empty();
+	H.insert(9);
+	ok = ok && !H.is_empty();
+	H.insert(1);
+	ok = ok && !H.is_empty();
+	H.insert(13);
+	ok = ok && !H.is_empty();
+	H.insert(5);
+	ok = ok && !H.is_empty();
+	H.insert(12);
+	ok = ok && !H.is_empty();
+	H.insert(3);
+	ok = ok && !H.is_empty();
+	H.insert(7);
+	ok = ok && !H.is_empty();
+	ok = ok && H.extract_min() == 1;
+	ok = ok && !H.is_empty();
+	ok = ok && H.extract_min() == 3;
+	ok = ok && !H.is_empty();
+	ok = ok && H.extract_min() == 5;
+	ok = ok && !H.is_empty();
+	ok = ok && H.extract_min() == 7;
+	ok = ok && !H.is_empty();
+	ok = ok && H.extract_min() == 9;
+	ok = ok && !H.is_empty();
+	ok = ok && H.extract_min() == 12;
+	ok = ok && !H.is_empty();
+	ok = ok && H.extract_min() == 13;
+	ok = ok && H.is_empty();
+	unsigned int end_time = clock();
+	unsigned int time = end_time - start_time; //time spent on the test
+	if (!ok)
+		std::cout << "Test4 wasn't passed" << std::endl;
+	return ok;
+}
+
+bool Test5() {
+	unsigned int start_time = clock();
+	BinomialHeap<char> H;
+	bool ok = 1;
+	ok = ok && H.is_empty();
+	H.insert('b');
+	ok = ok && !H.is_empty();
+	H.insert('a');
+	ok = ok && !H.is_empty();
+	H.insert('z');
+	ok = ok && !H.is_empty();
+	H.insert('s');
+	ok = ok && !H.is_empty();
+	H.insert('c');
+	ok = ok && !H.is_empty();
+	H.insert('d');
+	ok = ok && !H.is_empty();
+	ok = ok && !H.is_empty();
+	ok = ok && H.extract_min() == 'a';
+	ok = ok && !H.is_empty();
+	ok = ok && H.extract_min() == 'b';
+	ok = ok && !H.is_empty();
+	ok = ok && H.extract_min() == 'c';
+	ok = ok && !H.is_empty();
+	ok = ok && H.extract_min() == 'd';
+	ok = ok && !H.is_empty();
+	ok = ok && H.extract_min() == 's';
+	ok = ok && !H.is_empty();
+	ok = ok && H.extract_min() == 'z';
+	ok = ok && H.is_empty();
+	unsigned int end_time = clock();
+	unsigned int time = end_time - start_time; //time spent on the test
+	if (!ok)
+		std::cout << "Test5 wasn't passed" << std::endl;
+	return ok;
+}
+
+bool Test6() {//checking insert(), merge(), extract_min() and is_empty()
+	unsigned int start_time = clock();
+	BinomialHeap<int> H1, H2;
+	bool ok = 1;
+	ok = ok && H1.is_empty();
+	H1.insert(1);
+	ok = ok && !H1.is_empty();
+	H1.insert(2);
+	ok = ok && !H1.is_empty();
+	H1.insert(3);
+	ok = ok && !H1.is_empty();
+	H1.insert(179);
+	ok = ok && !H1.is_empty();
+	ok = ok && H2.is_empty();
+	H2.insert(17);
+	ok = ok && !H2.is_empty();
+	H2.insert(129);
+	ok = ok && !H2.is_empty();
+	H2.insert(98);
+	ok = ok && !H2.is_empty();
+	H2.insert(9123);
+	H1.merge(H2);
+	ok = ok && H1.extract_min() == 1;
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 2;
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 3;
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 17;
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 98;
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 129;
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 179;
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 9123;
+	ok = ok && H1.is_empty();
+	unsigned int end_time = clock();
+	if (!ok)
+		std::cout << "Test5 wasn't passed" << std::endl;
+	unsigned int time = end_time - start_time; //time spent on the test
+	return ok;
+}
+
+bool Test7() {//checking insert(), extract_min(), merge() and is_empty() 
+	unsigned int start_time = clock();
+	BinomialHeap<int> H1, H2, H3;
+	bool ok = 1;
+	ok = ok && H1.is_empty();
+	H1.insert(1);
+	ok = ok && !H1.is_empty();
+	H1.insert(2);
+	ok = ok && !H1.is_empty();
+	H1.insert(3);
+	ok = ok && !H1.is_empty();
+	H1.insert(179);
+	ok = ok && !H1.is_empty();
+	ok = ok && H2.is_empty();
+	H2.insert(17);
+	ok = ok && !H2.is_empty();
+	H2.insert(129);
+	ok = ok && !H2.is_empty();
+	H2.insert(98);
+	ok = ok && !H2.is_empty();
+	H2.insert(9123);
+	H1.merge(H2);
+	ok = ok && H1.extract_min() == 1;
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 2;
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 3;
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 17;
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 98;
+	ok = ok && !H1.is_empty();
+	H3.insert(41);
+	H3.insert(91);
+	H3.insert(91123);
+	H1.merge(H3);
+	ok = ok && H1.extract_min() == 41;
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 91;
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 129;
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 179;
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 9123;
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 91123;
+	ok = ok && H1.is_empty();
+	if (!ok)
+		std::cout << "Test7 wasn't passed" << std::endl;
+	unsigned int end_time = clock();
+	unsigned int time = end_time - start_time; //time spent on the test
+	return ok;
+}
+bool Test8() {//checking insert(), extract_min(), merge() and is_empty() 
+	unsigned int start_time = clock(); 
+	BinomialHeap<char> H1, H2, H3;
+	bool ok = 1;
+	ok = ok && H1.is_empty();
+	H1.insert('a');
+	ok = ok && !H1.is_empty();
+	H1.insert('b');
+	ok = ok && !H1.is_empty();
+	H1.insert('c');
+	ok = ok && !H1.is_empty();
+	H1.insert('d');
+	ok = ok && !H1.is_empty();
+	ok = ok && H2.is_empty();
+	H2.insert('z');
+	ok = ok && !H2.is_empty();
+	H2.insert('x');
+	ok = ok && !H2.is_empty();
+	H2.insert('s');
+	ok = ok && !H2.is_empty();
+	H2.insert('w');
+	H1.merge(H2);
+	ok = ok && H1.extract_min() == 'a';
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 'b';
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 'c';
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 'd';
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 's';
+	ok = ok && !H1.is_empty();
+	H3.insert('a');
+	H3.insert('c');
+	H3.insert('g');
+	H1.merge(H3);
+	ok = ok && H1.extract_min() == 'a';
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 'c';
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 'g';
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 'w';
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 'x';
+	ok = ok && !H1.is_empty();
+	ok = ok && H1.extract_min() == 'z';
+	ok = ok && H1.is_empty();
+	unsigned int end_time = clock();
+	unsigned int time = end_time - start_time; //time spent on the test
+	if (!ok)
+		std::cout << "Test8 wasn't passed" << std::endl;
+	return ok;
+}
+
+bool Test9() {//checking insert() and extract_min() big test
+	double start_time = clock();
+	BinomialHeap<int> H;
+	bool ok = 1;
+	for (int i = 0; i < 100000; ++i) {
+		H.insert(i);
+	}
+	for (int i = 0; i < 100000; ++i) {
+		ok = ok && H.extract_min() == i;
+	}
+	long double end_time = clock();
+	long double time = end_time - start_time; //time spent on the test
+	std::cout << "Test9: " << time / 1000 << " seconds" << std::endl;
+	if (!ok)
+		std::cout << "Test9 wasn't passed" << std::endl;
+	return ok;
+}
+
+int main()
+{
+	bool ok = 1;
+	ok = Test1() && Test2() && Test3() && Test4() && Test5() && Test6() && Test7() && Test8() && Test9();
+	if (ok)
+		std::cout << "OK" << std::endl;
+	else
+		while (1) std::cout << "FAILED" << std::endl;
+	return 0;
+}
