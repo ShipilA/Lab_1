@@ -25,10 +25,6 @@ struct BinTree {
 		Root->Left_child = otherTree.Root;
 		++k;
 	}
-	~BinTree() {
-		delete Root;
-		delete Right;
-	}
 };
 
 template <typename T>
@@ -41,7 +37,7 @@ class BinomialHeap
 		if (i == NULL || i->Root == NULL) {
 			Head = otherHeap.Head;
 		}
-		while (j != NULL && j->Root != NULL && i != NULL) {
+		while (j != NULL && j->Root != NULL && i != NULL && i->Root != NULL) {
 			if (j->Root->key >= i->Root->key) {
 				if (i->Right == NULL || j->Root->key <= i->Right->Root->key) {
 					save = i->Right;
@@ -56,22 +52,20 @@ class BinomialHeap
 					i = i->Right;
 			}
 			else if (j->Root->key < i->Root->key && i == Head) {
-					Head = j;
-					save = j->Right;
-					j->Right = i;
-					i = j;
-					j = save;
+				Head = j;
+				save = j->Right;
+				j->Right = i;
+				i = j;
+				j = save;
 			}
+			else
+				break;
 		}
 	}
 public:
-	~BinomialHeap() {
-		if (Head != NULL)
-			delete Head;
-	}
 	BinomialHeap() : Head(NULL) {}
 	bool is_empty() const {
-		return Head == NULL;
+		return Head == NULL || Head->Root == NULL;
 	}
 	T get_min() const {
 		try {
@@ -154,10 +148,6 @@ public:
 					help_cur = help_cur->Right_brother;
 				}
 				merge(*NewH);
-				delete cur;
-				delete prev;
-				delete NewH;
-				delete help_cur;
 				return min_key;
 			}
 		}
