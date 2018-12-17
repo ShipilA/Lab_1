@@ -1,6 +1,7 @@
 #pragma once
 #include<stddef.h>
 #include<iostream>
+#include<exception>
 
 template <typename T>
 
@@ -24,6 +25,12 @@ struct Node {
 	T key;
 	Node *Parent, *Left_child, *Right_child;
 	Node(T x) : Parent(NULL), Left_child(NULL), Right_child(NULL), key(x) {}
+	~Node() {
+		if (Left_child != NULL)
+			delete Left_child;
+		if (Right_child != NULL)
+			delete Right_child;
+	}
 };
 
 template <typename T>
@@ -103,37 +110,66 @@ public:
 		save_heap_up(Last);
 	}
 	T get_min() const {
-		return Root->key;
+		try {
+			if (is_empty()) {
+				throw std::out_of_range("the heap is empty, can't get_min\n");//ошибка если куча пуста
+			}
+			else {
+				return Root->key;
+			}
+		}
+		catch (exception& e) {
+			std::cerr << e.what() << '\n';
+			return NULL;
+		}
 	}
 	T extract_min() {
-		T Min_key = Root->key;
-		if (Root == Last) {
-			Root = Last = NULL;
-			return Min_key;
+		try {
+			if (is_empty()) {
+				throw std::out_of_range("the heap is empty, can't get_min\n");//ошибка если куча пуста
+			}
+			else {
+				T Min_key = Root->key;
+				if (Root == Last) {
+					delete Root;
+					Root = Last = NULL;
+					--Size;
+					return Min_key;
+				}
+				Root->key = Last->key;
+				if (Last->Parent->Right_child == NULL)
+					Last->Parent->Left_child = NULL;
+				else
+					Last->Parent->Right_child = NULL;
+				delete Last;
+				//Last = NULL;
+				--Size;
+				int x = Size >> 1, cnt = -1;
+				while (x) {
+					++cnt;
+					x >>= 1;
+				}
+				x = Size;
+				Node<T> *Cur = Root;
+				while (cnt >= 0) {
+					if ((x >> cnt) & 1)
+						Cur = Cur->Right_child;
+					else
+						Cur = Cur->Left_child;
+					--cnt;
+				}
+				Last = Cur;
+				save_heap_down(Root);
+				return Min_key;
+			}
 		}
-		Root->key = Last->key;
-		if (Last->Parent->Right_child == NULL)
-			Last->Parent->Left_child = NULL;
-		else
-			Last->Parent->Right_child = NULL;
-		Last = NULL;
-		--Size;
-		int x = Size >> 1, cnt = -1;
-		while (x) {
-			++cnt;
-			x >>= 1;
+		catch (std::exception& e) {
+			std::cerr << e.what() << '\n';
+			return NULL;
 		}
-		x = Size;
-		Node<T> *Cur = Root;
-		while (cnt >= 0) {
-			if ((x >> cnt) & 1)
-				Cur = Cur->Right_child;
-			else
-				Cur = Cur->Left_child;
-			--cnt;
-		}
-		Last = Cur;
-		save_heap_down(Root);
-		return Min_key;
+	}
+	~Heap() {
+		if (Root != NULL)
+			delete Root;
 	}
 };
