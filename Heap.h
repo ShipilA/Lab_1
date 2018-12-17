@@ -51,11 +51,11 @@ private:
 		if (Cur->Left_child == NULL || Cur->key <= Cur->Left_child->key && Cur->Right_child == NULL || Cur->Right_child != NULL && Cur->key <= Cur->Right_child->key && Cur->key <= Cur->Left_child->key)
 			return;
 		if (Cur->key > Cur->Left_child->key && (Cur->Right_child == NULL || Cur->Right_child->key >= Cur->Left_child->key)) {
-			swap(Cur->key, Cur->Left_child->key);
+			myownswap(Cur->key, Cur->Left_child->key);
 			save_heap_down(Cur->Left_child);
 			return;
 		}
-		swap(Cur->key, Cur->Right_child->key);
+		myownswap(Cur->key, Cur->Right_child->key);
 		save_heap_down(Cur->Right_child);
 	}
 public:
@@ -118,7 +118,7 @@ public:
 				return Root->key;
 			}
 		}
-		catch (exception& e) {
+		catch (std::exception& e) {
 			std::cerr << e.what() << '\n';
 			return NULL;
 		}
