@@ -47,6 +47,14 @@ private:
 		Cur->Parent->key = save;
 		save_heap_up(Cur->Parent);
 	}
+	Node<T> save_heap_up_node(Node<T> *Cur) {
+		if (Cur == Root || Cur->Parent->key <= Cur->key)
+			return Cur;
+		T save = Cur->key;
+		Cur->key = Cur->Parent->key;
+		Cur->Parent->key = save;
+		return save_heap_up(Cur->Parent);
+	}
 	void save_heap_down(Node<T> *Cur) {
 		if (Cur->Left_child == NULL || Cur->key <= Cur->Left_child->key && Cur->Right_child == NULL || Cur->Right_child != NULL && Cur->key <= Cur->Right_child->key && Cur->key <= Cur->Left_child->key)
 			return;
@@ -57,6 +65,16 @@ private:
 		}
 		myownswap(Cur->key, Cur->Right_child->key);
 		save_heap_down(Cur->Right_child);
+	}
+	Node<T> save_heap_down_node(Node<T> *Cur) {
+		if (Cur->Left_child == NULL || Cur->key <= Cur->Left_child->key && Cur->Right_child == NULL || Cur->Right_child != NULL && Cur->key <= Cur->Right_child->key && Cur->key <= Cur->Left_child->key)
+			return Cur;
+		if (Cur->key > Cur->Left_child->key && (Cur->Right_child == NULL || Cur->Right_child->key >= Cur->Left_child->key)) {
+			myownswap(Cur->key, Cur->Left_child->key);
+			return save_heap_down(Cur->Left_child);
+		}
+		myownswap(Cur->key, Cur->Right_child->key);
+		return save_heap_down(Cur->Right_child);
 	}
 public:
 	Heap() : Root(NULL), Size(0), Last(NULL) {}
@@ -108,6 +126,44 @@ public:
 			Cur->Left_child = Last;
 		Last->Parent = Cur;
 		save_heap_up(Last);
+	}
+	Node<T> insert_node(T key) {
+		if (Root == NULL) {
+			Last = Root = new Node<T>(key);
+			++Size;
+			return save_heap_up_node(Last);
+		}
+		if (Last == Root) {
+			Last = new Node<T>(key);
+			Root->Left_child = Last;
+			Last->Parent = Root;
+			if (Root->key > Last->key)
+				myownswap(Root->key, Last->key);
+			++Size;
+			return save_heap_up_node(Last);
+		}
+		++Size;
+		int x = Size >> 1, cnt = -1;
+		while (x) {
+			++cnt;
+			x >>= 1;
+		}
+		x = Size;
+		Node<T> *Cur = Root;
+		while (cnt) {
+			if ((x >> cnt) & 1)
+				Cur = Cur->Right_child;
+			else
+				Cur = Cur->Left_child;
+			--cnt;
+		}
+		Last = new Node<T>(key);
+		if (x & 1)
+			Cur->Right_child = Last;
+		else
+			Cur->Left_child = Last;
+		Last->Parent = Cur;
+		return save_heap_up_node(Last);
 	}
 	T get_min() const {
 		try {
@@ -167,6 +223,18 @@ public:
 			std::cerr << e.what() << '\n';
 			return NULL;
 		}
+	}
+	void del(Node<T> x) {
+		int save = x->key;
+		x->key = Root->key;
+		Root->key = save;
+		H.extract_min();
+		H.save_heap_up(x);
+	}
+	void change(Node<T> x, T k) {
+		x->key = k;
+		H.save_heap_down(x);
+		H.save_heap_up(x);
 	}
 	~Heap() {
 		if (Root != NULL)
